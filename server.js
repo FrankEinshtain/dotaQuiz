@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 // const path = require('path')
-const { getRandomImage } = require('./src/servLib')
+const { getQuestion } = require('./src/servLib')
 const app = express()
 const port = 8000
 
@@ -21,7 +21,7 @@ app.listen(port, () => {
 
 app.get('/question', (req, res) => {
   console.log(`I GOT A 'question' REQUEST`)
-  getRandomImage()
+  getQuestion()
     .then(imgBase => {
       return res.status(200).send(imgBase)
     })

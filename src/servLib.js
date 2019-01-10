@@ -1,3 +1,4 @@
+const random = require('random')
 const MongoClient = require('mongodb').MongoClient
 const dbUrl = 'mongodb://localhost:27017/test'
 let db = {}
@@ -9,15 +10,52 @@ mongoClient.connect((err, database) => {
   db = database.db('test')
 })
 
-const getRandomImage = () => {
-  let collection = db.collection('items')
-  // let one = collection.countDocuments()
-  // return console.log(one)
+const rrr = () => {
+  return random.int(0, 174)
+}
+
+const getRandomItem = (resp) => {
+  const dig = rrr()
+  const itm = resp[dig]
+  const answ = itm.partOf.length === 0
+    ? getRandomItem(resp)
+    : itm
+  return answ
+}
+
+const getQuestion = () => {
+  const collection = db.collection('items')
   return new Promise((resolve, reject) => {
-    let coll = collection.find({}, { name: 1, avatar: 1, _id: 0 }).toArray()
+    const coll = collection.find({}).toArray()
     coll.then(resp => {
-      let num = Math.floor(Math.random() * 175)
-      resolve(resp[num].avatar)
+      const dataArr = resp
+      const item = getRandomItem(dataArr)
+      const questionItem = {
+        name: item.name,
+        avatar: item.avatar
+      }
+      const rightAnsPairs = []
+      const wrongAnsPairs = []
+      for (let t = 0; t < item.partOf.length; t += 1) {
+        let pair = {
+          name: item.partOf[t].nameOf,
+          avatar: item.partOf[t].ava
+        }
+        rightAnsPairs.push(pair)
+      }
+      for (let y = rightAnsPairs.length; y < 8; y += 1) {
+        let rr = rrr()
+        const rItem = resp[rr]
+        const pair = {
+          name: rItem.name,
+          avatar: rItem.avatar
+        }
+        wrongAnsPairs.push(pair)
+      }
+      const oneQuestion = rightAnsPairs.concat(wrongAnsPairs)
+      oneQuestion.push(questionItem)
+      resolve(oneQuestion)
+      console.log('question length: ', oneQuestion.length)
     })
     coll.catch(() => {
       reject(console.error)
@@ -25,15 +63,4 @@ const getRandomImage = () => {
   })
 }
 
-// const getRandomImage = () => {
-//   let collection = db.collection('items')
-//   return new Promise((resolve, reject) => {
-//     collection.find({ name: 'Cheese' }, { name: 1, avatar: 1, _id: 0 }, (err, resp) => {
-//       if (err) { reject(console.log(`FUCK YOU ERROR!!!\n${err}`)) }
-//       let one = resp.avatar
-//       resolve(one)
-//     })
-//   })
-// }
-
-module.exports.getRandomImage = getRandomImage
+module.exports.getQuestion = getQuestion

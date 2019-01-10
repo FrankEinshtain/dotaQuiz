@@ -1,26 +1,27 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import QuestionView from './QuestionView'
 
 class App extends Component {
   state = {
-    image: ''
+    items: []
+    // image: ''
   }
 
   getImage = () => {
     axios.get('http://localhost:8000/question')
     .then(responce => {
       // console.log(`RESPONSE from SERVER\n${responce.data}`)
-      this.setState({ image: responce.data })
+      this.setState({ items: responce.data })
     })
     .catch(err => {console.log('AXIOS ERROR', err)})
   }
 
   renderHelper() {
-    if (this.state.image) {
-      return <img src={`data:image/jpeg;base64,${this.state.image}`} />
+    if (this.state.items) {
+      return <QuestionView arr={this.state.items} />
     }
   }
-
   render () {
     return (
       <div className='ui container'>

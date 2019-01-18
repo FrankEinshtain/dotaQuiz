@@ -1,42 +1,97 @@
 import React from 'react'
+import QuestionButt from './QuestionButt'
 
 class QuestionView extends React.Component {
-  render () {
-    const inArr = this.props.arr
-    // inArr[8]
-    // const first = inArr.pop()
-    // console.log('Q ITEM: ', first)
+  state = {
+    clickedButts: []
+  }
 
-    const qItem = () => {
-      let n = this.props.arr[1].name
-      let a = this.props.arr[1].avatar
+  render() {
+    const inArr = this.props.arr
+    const first = inArr.slice(0, 1)
+    const others = inArr.slice(1)
+
+    const qItemOut = () => {
+      // console.log('Q ITEM: ', first)
+      let str2arr = first
+        .join(',')
+        .split(',')
       return (
-        <div className='ui segment' >
-          <h1>{n}</h1>
+        <div className='ui small images'>
+          <h1>{str2arr[0]}</h1>
           <img
-            src={`data:image/jpeg;base64,${a}`}
-            alt={n}
+            src={`data:image/jpeg;base64,${str2arr[1]}`}
+            alt={str2arr[0]}
           />
         </div>
       )
     }
 
-    const outArr = inArr.map(item => {
+    const handleClick = (data) => {
+      let buttData = this.state.clickedButts
+      if (data[1] !== '') {
+        let pushData = [data[0], data[1]]
+        buttData.push(pushData)
+        this.setState({ clickedButts: buttData })
+      }
+      if (data[1] === '') {
+        let newButtData = buttData.filter(clickedButt => clickedButt[0] !== data[0])
+        this.setState({ clickedButts: newButtData })
+      }
+    }
+
+    const removeChildren = (elem) => {
+      while (elem.lastChild) {
+        elem.removeChild(elem.lastChild);
+      }
+    }
+
+    // const rrr = () => {
+    //   // let i = new Date().getTime()
+    //   let i = performance.now()
+    //     return i
+    // }
+
+    const outArr = others.map((item, index) => {
       return (
-        <div>
-          <img
-            src={`data:image/jpeg;base64,${item.avatar}`}
-            alt={item.name}
-          />
-        </div>
+        <QuestionButt
+          mamaClick={handleClick}
+          key={item[0]}
+          z={index}
+          item={item}
+          isClicked='small ui image'
+          clickName=''
+        />
       )
     })
+
+    const firstLine = outArr.slice(0, 4)
+    const secondLine = outArr.slice(4)
+
+    const getNextQuest = (clB) => {
+      this.props.getNext(clB)
+      // let s = []
+      this.setState({ clickedButts: [] })
+      removeChildren(QuestionView)
+    }
+
     return (
-      <div className='ui container'>.
-        {qItem()}
+      <div className='ui container'>
+        {qItemOut()}
         <div className='ui segment'>
-          {outArr}
+          <div className='ui small images'>
+            {firstLine}
+          </div>
+          <div className='ui small images'>
+            {secondLine}
+          </div>
         </div>
+        <button
+          className='ui button'
+          onClick={e => getNextQuest(this.state.clickedButts)}
+        >
+          NEXT QUESTION
+        </button>
       </div>
     )
   }

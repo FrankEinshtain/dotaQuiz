@@ -12,7 +12,6 @@ class QuestionView extends React.Component {
     const others = inArr.slice(1)
 
     const qItemOut = () => {
-      // console.log('Q ITEM: ', first)
       let str2arr = first
         .join(',')
         .split(',')
@@ -46,12 +45,6 @@ class QuestionView extends React.Component {
       }
     }
 
-    // const rrr = () => {
-    //   // let i = new Date().getTime()
-    //   let i = performance.now()
-    //     return i
-    // }
-
     const outArr = others.map((item, index) => {
       return (
         <QuestionButt
@@ -70,7 +63,6 @@ class QuestionView extends React.Component {
 
     const getNextQuest = (clB) => {
       this.props.getNext(clB)
-      // let s = []
       this.setState({ clickedButts: [] })
       removeChildren(QuestionView)
     }

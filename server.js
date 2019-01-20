@@ -22,6 +22,7 @@ app.listen(port, () => {
 })
 
 app.get('/question', (req, res) => {
+  if (!req.body) return res.status(500).send('idi v pezdu')
   try {
     const question = getQuestion(arrData)
     return res.send(question)
@@ -32,7 +33,7 @@ app.get('/question', (req, res) => {
 })
 
 app.post('/nextQuestion', (req, res) => {
-  console.log(req.body)
+  if (!req.body) return res.status(500).send('idi v pezdu')
   try {
     const nextQuestion = getNextQuestion(req.body, arrData)
     return res.send(nextQuestion)

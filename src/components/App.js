@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import QuestionView from './QuestionView'
 
+const { REACT_APP_API_URL } = process.env
+
 class App extends Component {
   state = {
     question: null,
@@ -12,7 +14,7 @@ class App extends Component {
   }
 
   getQuestion = () => {
-    axios.get('http://localhost:8000/question')
+    axios.get(`${REACT_APP_API_URL}/question`)
       .then(response => {
         const { question, answers } = response.data
         this.setState({
@@ -34,7 +36,7 @@ class App extends Component {
 
     // [name, name, name, name]
 
-    axios.post('http://localhost:8000/nextQuestion', clButts)
+    axios.post(`${REACT_APP_API_URL}/nextQuestion`, clButts)
       .then(response => {
         // console.log(typeof (response.data))
         if (typeof (response.data) === 'number') {

@@ -22,9 +22,9 @@ app.listen(port, () => {
 })
 
 app.get('/question', (req, res) => {
-  if (!req.body) return res.status(500).send('idi v pezdu')
   try {
     const question = getQuestion(arrData)
+    console.log(question.answers.length)
     return res.send(question)
   } catch (e) {
     console.error(e)

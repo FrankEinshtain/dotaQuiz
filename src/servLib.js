@@ -46,7 +46,6 @@ const getQuestion = (data) => {
     if (answers.length > 0 && answers.some(p => p.name === pair.name)) {
       pair = getRandomAnswer(data)
     }
-    console.log('pair.name', pair.name)
     answers.push(pair)
   }
   answers.sort(randSort)

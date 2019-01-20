@@ -4,6 +4,8 @@ import QuestionView from './QuestionView'
 
 class App extends Component {
   state = {
+    question: null,
+    draftAnswers: null,
     items: [],
     answers: [],
     finish: 0
@@ -11,33 +13,44 @@ class App extends Component {
 
   getQuestion = () => {
     axios.get('http://localhost:8000/question')
-    .then(responce => {
-      this.setState({ items: responce.data, finish: 0 })
-    })
-    .catch(err => {console.log('AXIOS ERROR', err)})
+      .then(response => {
+        const { question, answers } = response.data
+        this.setState({
+          question,
+          draftAnswers: answers,
+          finish: 0
+        })
+      })
+      .catch(console.error)
+      // FROM => [[name, ava],[name, ava],[name, ava],[name, ava]] 
+      // TO => { question: { name, ava }, answers: [{ name, ava }, { name, ava }, { name, ava }] }
   }
 
-  getNextQuestion = (e) => {
-    let clButts = e.map(item => {return item[1]})
+  getNextQuestion = clickedButts => {
+    const clButts = clickedButts.map(item => item[1])
     this.setState({ answers: clButts })
-    const qItem = this.state.items[0]
-    clButts.unshift(qItem[0])
+    const qItem = this.state.question
+    clButts.unshift(qItem.name)
+
+    // [name, name, name, name]
 
     axios.post('http://localhost:8000/nextQuestion', clButts)
-    .then(responce => {
-              // console.log(typeof (responce.data))
-      if (typeof (responce.data) === 'number') {
-        this.setState({ finish: responce.data, answers: [], items: [] })
-      } else if (typeof (responce.data) === 'object') {
-      this.setState({ items: responce.data, answers: [] })
-      }
-    })
-    .catch(console.error)
+      .then(response => {
+        // console.log(typeof (response.data))
+        if (typeof (response.data) === 'number') {
+          this.setState({ finish: response.data, answers: [], question: null, draftAnswers: null })
+        } else if (typeof (response.data) === 'object') {
+          console.log('response', response)
+          const { question, answers } = response.data
+          this.setState({ question, draftAnswers: answers, answers: [] })
+        }
+      })
+      .catch(console.error)
   }
 
   renderHelper() {
-    const { items, answers, finish } = this.state
-    if (finish === 0 && answers.length === 0 && items.length === 0) {
+    const { question, draftAnswers, answers, finish } = this.state
+    if (finish === 0 && answers.length === 0 && !question) {
       return <div className='ui segment'>
           <div className='ui header'>
             HELLO
@@ -46,7 +59,7 @@ class App extends Component {
             GO!
           </button>
         </div>
-    }else if (finish > 0 && answers.length === 0 && items.length === 0) {
+    } else if (finish > 0 && answers.length === 0 && !question) {
       return <div className='ui segment'>
           <div className='ui header'>
             RIGHT answers: {this.state.finish}
@@ -55,20 +68,25 @@ class App extends Component {
             AGAIN?
           </button>
         </div>
-    }else if (finish === 0 && answers.length === 0 && items.length > 0) {
-      return <div className='ui segment'>
-      <QuestionView getNext={this.getNextQuestion} arr={this.state.items} />
-      </div>
+    } else {
+      return (
+        <div className='ui segment'>
+          <QuestionView
+            getNext={this.getNextQuestion}
+            question={question}
+            draftAnswers={draftAnswers}
+          />
+        </div>
+      )
     }
   }
   render () {
-
     return (
       <div className='ui container'>
-          <div>
-            {this.renderHelper()}
-          </div>
+        <div>
+          {this.renderHelper()}
         </div>
+      </div>
     )
   }
 }

@@ -10,25 +10,25 @@ class QuestionButt extends React.Component {
   }
 
   toggleClick = () => {
+    const { item, mamaClick, z } = this.props
     let click = this.state.isClicked === 'disabled small ui image'
       ? 'small ui image'
       : 'disabled small ui image'
     let click2 = this.state.clickName === ''
-      ? this.props.item[0]
+      ? item.name
       : ''
     this.setState({ isClicked: click, clickName: click2 })
-    // console.log('buttName: ', click2)
-    let dataOut = [this.props.z, click2]
-    this.props.mamaClick(dataOut)
+    mamaClick([z, click2])
   }
 
   render() {
+    const { item } = this.props
     return (
       <img
-        key={this.props.key}
+        // key={this.props.key}
         className={this.state.isClicked}
-        src={`data:image/jpeg;base64,${this.props.item[1]}`}
-        alt={this.props.item[0]}
+        src={`data:image/jpeg;base64,${item.ava}`}
+        alt={item.name}
         onClick={this.toggleClick}
       />
     )

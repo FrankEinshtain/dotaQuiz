@@ -1,5 +1,13 @@
 const fs = require('fs')
 
-const arrData = JSON.parse(fs.readFileSync('items.json'))
+let arrData = []
+try {
+  const items = fs.readFileSync('items.json')
+  arrData = JSON.parse(items)
+} catch (e) {
+  console.error(e)
+}
 
-module.exports.arrData = arrData
+module.exports = {
+  arrData
+}

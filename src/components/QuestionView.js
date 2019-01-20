@@ -6,50 +6,40 @@ class QuestionView extends React.Component {
     clickedButts: []
   }
 
+  handleClick = (data) => {
+    let buttData = this.state.clickedButts
+    if (data[1] !== '') {
+      let pushData = [data[0], data[1]]
+      buttData.push(pushData)
+      this.setState({ clickedButts: buttData })
+    }
+    if (data[1] === '') {
+      let newButtData = buttData.filter(clickedButt => clickedButt[0] !== data[0])
+      this.setState({ clickedButts: newButtData })
+    }
+  }
+
+  removeChildren = (elem) => {
+    while (elem.lastChild) {
+      elem.removeChild(elem.lastChild);
+    }
+  }
+
+  getNextQuest = () => {
+    const { getNext } = this.props
+    const { clickedButts } = this.state
+    getNext(clickedButts)
+    this.setState({ clickedButts: [] })
+    this.removeChildren(QuestionView)
+  }
+
   render() {
-    const inArr = this.props.arr
-    const first = inArr.slice(0, 1)
-    const others = inArr.slice(1)
-
-    const qItemOut = () => {
-      let str2arr = first
-        .join(',')
-        .split(',')
-      return (
-        <div className='ui small images'>
-          <h1>{str2arr[0]}</h1>
-          <img
-            src={`data:image/jpeg;base64,${str2arr[1]}`}
-            alt={str2arr[0]}
-          />
-        </div>
-      )
-    }
-
-    const handleClick = (data) => {
-      let buttData = this.state.clickedButts
-      if (data[1] !== '') {
-        let pushData = [data[0], data[1]]
-        buttData.push(pushData)
-        this.setState({ clickedButts: buttData })
-      }
-      if (data[1] === '') {
-        let newButtData = buttData.filter(clickedButt => clickedButt[0] !== data[0])
-        this.setState({ clickedButts: newButtData })
-      }
-    }
-
-    const removeChildren = (elem) => {
-      while (elem.lastChild) {
-        elem.removeChild(elem.lastChild);
-      }
-    }
-
-    const outArr = others.map((item, index) => {
+    const { question, draftAnswers } = this.props
+    const outArr = draftAnswers.map((item, index) => {
       return (
         <QuestionButt
-          mamaClick={handleClick}
-          key={item[0]}
+          mamaClick={this.handleClick}
+          key={item.name + index}
           z={index}
           item={item}
           isClicked='small ui image'
@@ -61,15 +51,15 @@ class QuestionView extends React.Component {
     const firstLine = outArr.slice(0, 4)
     const secondLine = outArr.slice(4)
 
-    const getNextQuest = (clB) => {
-      this.props.getNext(clB)
-      this.setState({ clickedButts: [] })
-      removeChildren(QuestionView)
-    }
-
     return (
       <div className='ui container'>
-        {qItemOut()}
+        <div className='ui small images'>
+          <h1>{question.name}</h1>
+          <img
+            src={`data:image/jpeg;base64,${question.ava}`}
+            alt={question.name}
+          />
+        </div>
         <div className='ui segment'>
           <div className='ui small images'>
             {firstLine}
@@ -80,7 +70,7 @@ class QuestionView extends React.Component {
         </div>
         <button
           className='ui button'
-          onClick={e => getNextQuest(this.state.clickedButts)}
+          onClick={() => this.getNextQuest()}
         >
           NEXT QUESTION
         </button>

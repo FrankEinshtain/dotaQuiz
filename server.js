@@ -8,7 +8,6 @@ const app = express()
 const port = process.env.APP_PORT || 8000
 
 app.use(express.static(__dirname))
-// app.use(express.static(path.join('__dirname', '/build')))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use((req, res, next) => {
@@ -24,7 +23,7 @@ app.listen(port, () => {
 app.get('/question', (req, res) => {
   try {
     const question = getQuestion(arrData)
-    console.log(question.answers.length)
+    // console.log(question.answers.length)
     return res.send(question)
   } catch (e) {
     console.error(e)
@@ -35,7 +34,7 @@ app.get('/question', (req, res) => {
 app.post('/nextQuestion', (req, res) => {
   if (!req.body) return res.status(500).send('idi v pezdu')
   try {
-    console.log('got POST from front:\n', req.body)
+    // console.log('got POST from front:\n', req.body)
     const nextQuestion = getNextQuestion(req.body, arrData)
     return res.send(nextQuestion)
   } catch (e) {

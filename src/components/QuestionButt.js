@@ -25,7 +25,6 @@ class QuestionButt extends React.Component {
     const { item } = this.props
     return (
       <img
-        // key={this.props.key}
         className={this.state.isClicked}
         src={`data:image/jpeg;base64,${item.ava}`}
         alt={item.name}

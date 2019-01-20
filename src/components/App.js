@@ -2,15 +2,52 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import QuestionView from './QuestionView'
 
-const { REACT_APP_API_URL } = process.env
+const { REACT_APP_API_URL, REACT_APP_QUESTIONS_AMOUNT } = process.env
 
 class App extends Component {
   state = {
+    startTime: null,
+    finishTime: null,
     question: null,
     draftAnswers: null,
     items: [],
     answers: [],
     finish: 0
+  }
+
+  setStartTime = () => {
+    this.setState({ startTime: new Date().getTime() })
+  }
+
+  getQuizTime = () => {
+    const { startTime, finishTime } = this.state
+    const diffTime = new Date(finishTime - startTime).getTime()
+    const ms = diffTime % 1000
+    const allSec = Math.floor(diffTime / 1000)
+    const min = Math.floor(allSec / 60)
+    const sec = allSec - (min * 60)
+    const quizTime = `${min}:${sec}.${ms}`
+    const questionTime = Math.floor(diffTime / REACT_APP_QUESTIONS_AMOUNT)
+    const questionMs = questionTime % 1000
+    const questionSec = Math.floor(questionTime / 1000)
+    const questionTimeString = `${questionSec}.${questionMs}`
+    return (
+      startTime && !finishTime
+        ? <div>
+          <p>LOADING...</p>
+          <p>LOL..KEK..</p>
+        </div>
+        : <div>
+          <p>общее время квиза: {quizTime}</p>
+          <p>среднее время ответа: {questionTimeString}</p>
+        </div>
+    )
+  }
+
+  getFirstQuestion = () => {
+    this.setState({ startTime: null, finishTime: null })
+    this.getQuestion()
+    this.setStartTime()
   }
 
   getQuestion = () => {
@@ -24,30 +61,23 @@ class App extends Component {
         })
       })
       .catch(console.error)
-    // FROM => [[name, ava],[name, ava],[name, ava],[name, ava]]
-    // TO => { question: { name, ava }, answers: [{ name, ava }, { name, ava }, { name, ava }] }
   }
 
   getNextQuestion = clickedButts => {
-    console.log('\nfrom user to getNextQuestion\n', clickedButts)
     const clButts = clickedButts.map(item => item[1])
     this.setState({ answers: clButts })
     const qItem = this.state.question
-    // clButts.unshift(qItem.name)
     const answerToServer = {
       question: qItem.name,
       answers: clButts
     }
 
-    // [name, name, name, name]
-
     axios.post(`${REACT_APP_API_URL}/nextQuestion`, answerToServer)
       .then(response => {
-        // console.log(typeof (response.data))
         if (typeof (response.data) === 'number') {
-          this.setState({ finish: response.data, answers: [], question: null, draftAnswers: null })
+          const finishTime = new Date().getTime()
+          this.setState({ finish: response.data, finishTime, answers: [], question: null, draftAnswers: null })
         } else if (typeof (response.data) === 'object') {
-          console.log('response', response)
           const { question, answers } = response.data
           this.setState({ question, draftAnswers: answers, answers: [] })
         }
@@ -63,7 +93,7 @@ class App extends Component {
           <div className='ui header'>
             Что можно собрать, используя этот предмет?
           </div>
-          <button className='ui button' onClick={this.getQuestion}>
+          <button className='ui button' onClick={this.getFirstQuestion}>
             GO!
           </button>
         </div>
@@ -72,9 +102,10 @@ class App extends Component {
       return (
         <div className='ui segment'>
           <div className='ui header'>
-            RIGHT answers: {this.state.finish}
+            <p>количество правильных ответов: {this.state.finish}</p>
+            {this.getQuizTime()}
           </div>
-          <button className='ui button' onClick={this.getQuestion}>
+          <button className='ui button' onClick={this.getFirstQuestion}>
             AGAIN?
           </button>
         </div>

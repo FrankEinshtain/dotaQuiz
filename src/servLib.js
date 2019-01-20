@@ -2,7 +2,7 @@ const dotenv = require('dotenv').config()
 const random = require('random')
 
 const {
-  QUESTIONS_AMOUNT,
+  REACT_APP_QUESTIONS_AMOUNT,
   MAX_ANSWERS
 } = process.env
 
@@ -54,35 +54,29 @@ const getQuestion = (data) => {
 }
 
 const getNextQuestion = (answrs, data) => {
-  console.log('got answer for one question from user:\n', answrs)
+  // console.log('got answer for one question from user:\n', answrs)
   checkAnswer(answrs, data)
   questionCounter += 1
-  if (questionCounter <= QUESTIONS_AMOUNT) {
+  if (questionCounter < REACT_APP_QUESTIONS_AMOUNT) {
     return getQuestion(data)
   } else {
     questionCounter = 0
     const out = rightAnsw.length
     rightAnsw = []
-    console.log('### right answers: ', rightAnsw)
-    console.log('### right answersOUT: ', out)
+    // console.log('### right answersOUT: ', out)
     return '' + out
   }
 }
 
 const checkAnswer = (answer, data) => {
   const { question, answers } = answer
-  console.log('userAnswersforOneQuestion:\n', answer)
-  console.log('userAnswersforOneQuestion QUESTION ITEM:\n', question)
-  console.log('userAnswersforOneQuestion Answers:\n', answers)
-  // console.log('general amount of right\nanswers after one question: ', rightAnsw.length)
-  // const questionItem = question
-  // console.log('question Item: ', questionItem)
+  // console.log('userAnswersforOneQuestion:\n', answer)
   const toCheck = answers
   const separateAnswers = data.filter(item => item.name === question)
   const etalonAnswers = separateAnswers[0].partOf.map(part => {
     return part.nameOf
   })
-  console.log('right answers for one questions: ', etalonAnswers)
+  // console.log('right answers for one questions: ', etalonAnswers)
   toCheck.forEach(el => {
     if (etalonAnswers.some(answer => answer === el)) {
       rightAnsw.push(el)

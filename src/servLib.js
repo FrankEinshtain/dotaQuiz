@@ -14,7 +14,7 @@ const rrr = (lastItem) => {
 }
 
 const randSort = (a, b) => {
-  return random.int(0, 7)
+  return random.int(0, 8)
 }
 
 const getRandomItem = (resp) => {
@@ -54,31 +54,39 @@ const getQuestion = (data) => {
 }
 
 const getNextQuestion = (answrs, data) => {
-  console.log('answer length: ', answrs)
+  console.log('got answer for one question from user:\n', answrs)
   checkAnswer(answrs, data)
   questionCounter += 1
   if (questionCounter <= QUESTIONS_AMOUNT) {
     return getQuestion(data)
   } else {
     questionCounter = 0
+    const out = rightAnsw.length
+    rightAnsw = []
     console.log('### right answers: ', rightAnsw)
-    return '' + rightAnsw.length
+    console.log('### right answersOUT: ', out)
+    return '' + out
   }
 }
 
 const checkAnswer = (answer, data) => {
-  const questionItem = answer[0]
-  const toCheck = answer.slice(1)
-  const separateAnswers = data.filter(item => item.name === questionItem)
-  const rightAnswers = separateAnswers[0].partOf.map(part => {
+  const { question, answers } = answer
+  console.log('userAnswersforOneQuestion:\n', answer)
+  console.log('userAnswersforOneQuestion QUESTION ITEM:\n', question)
+  console.log('userAnswersforOneQuestion Answers:\n', answers)
+  // console.log('general amount of right\nanswers after one question: ', rightAnsw.length)
+  // const questionItem = question
+  // console.log('question Item: ', questionItem)
+  const toCheck = answers
+  const separateAnswers = data.filter(item => item.name === question)
+  const etalonAnswers = separateAnswers[0].partOf.map(part => {
     return part.nameOf
   })
+  console.log('right answers for one questions: ', etalonAnswers)
   toCheck.forEach(el => {
-    rightAnswers.forEach(answ => {
-      if (el === answ) {
-        rightAnsw.push(el)
-      }
-    })
+    if (etalonAnswers.some(answer => answer === el)) {
+      rightAnsw.push(el)
+    }
   })
 }
 

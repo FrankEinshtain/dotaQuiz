@@ -7,14 +7,18 @@ class QuestionView extends React.Component {
   }
 
   handleClick = (data) => {
-    let buttData = this.state.clickedButts
+    console.log('\nwhat we have in handleClick after click on icon\n', data)
+    // let buttData = this.state.clickedButts
+    const { clickedButts } = this.state
+    console.log('\nCLICKED BUTTS\n', clickedButts)
     if (data[1] !== '') {
       let pushData = [data[0], data[1]]
-      buttData.push(pushData)
-      this.setState({ clickedButts: buttData })
+      clickedButts.push(pushData)
+      this.setState({ clickedButts })
     }
     if (data[1] === '') {
-      let newButtData = buttData.filter(clickedButt => clickedButt[0] !== data[0])
+      let newButtData = clickedButts.filter(clickedButt => clickedButt[0] !== data[0])
+      console.log('\nafter button release\n', newButtData)
       this.setState({ clickedButts: newButtData })
     }
   }
@@ -28,6 +32,7 @@ class QuestionView extends React.Component {
   getNextQuest = () => {
     const { getNext } = this.props
     const { clickedButts } = this.state
+    console.log('\nfrom QuestionView to getNextQuest\n', clickedButts)
     getNext(clickedButts)
     this.setState({ clickedButts: [] })
     this.removeChildren(QuestionView)

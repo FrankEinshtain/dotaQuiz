@@ -35,6 +35,7 @@ app.get('/question', (req, res) => {
 app.post('/nextQuestion', (req, res) => {
   if (!req.body) return res.status(500).send('idi v pezdu')
   try {
+    console.log('got POST from front:\n', req.body)
     const nextQuestion = getNextQuestion(req.body, arrData)
     return res.send(nextQuestion)
   } catch (e) {

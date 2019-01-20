@@ -24,19 +24,24 @@ class App extends Component {
         })
       })
       .catch(console.error)
-      // FROM => [[name, ava],[name, ava],[name, ava],[name, ava]] 
-      // TO => { question: { name, ava }, answers: [{ name, ava }, { name, ava }, { name, ava }] }
+    // FROM => [[name, ava],[name, ava],[name, ava],[name, ava]]
+    // TO => { question: { name, ava }, answers: [{ name, ava }, { name, ava }, { name, ava }] }
   }
 
   getNextQuestion = clickedButts => {
+    console.log('\nfrom user to getNextQuestion\n', clickedButts)
     const clButts = clickedButts.map(item => item[1])
     this.setState({ answers: clButts })
     const qItem = this.state.question
-    clButts.unshift(qItem.name)
+    // clButts.unshift(qItem.name)
+    const answerToServer = {
+      question: qItem.name,
+      answers: clButts
+    }
 
     // [name, name, name, name]
 
-    axios.post(`${REACT_APP_API_URL}/nextQuestion`, clButts)
+    axios.post(`${REACT_APP_API_URL}/nextQuestion`, answerToServer)
       .then(response => {
         // console.log(typeof (response.data))
         if (typeof (response.data) === 'number') {
@@ -53,16 +58,19 @@ class App extends Component {
   renderHelper() {
     const { question, draftAnswers, answers, finish } = this.state
     if (finish === 0 && answers.length === 0 && !question) {
-      return <div className='ui segment'>
+      return (
+        <div className='ui segment'>
           <div className='ui header'>
-            HELLO
+            Что можно собрать, используя этот предмет?
           </div>
           <button className='ui button' onClick={this.getQuestion}>
             GO!
           </button>
         </div>
+      )
     } else if (finish > 0 && answers.length === 0 && !question) {
-      return <div className='ui segment'>
+      return (
+        <div className='ui segment'>
           <div className='ui header'>
             RIGHT answers: {this.state.finish}
           </div>
@@ -70,6 +78,7 @@ class App extends Component {
             AGAIN?
           </button>
         </div>
+      )
     } else {
       return (
         <div className='ui segment'>
@@ -82,7 +91,7 @@ class App extends Component {
       )
     }
   }
-  render () {
+  render() {
     return (
       <div className='ui container'>
         <div>

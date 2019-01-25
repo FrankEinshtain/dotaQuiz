@@ -17,15 +17,11 @@ const compare = (a, b) => {
 }
 
 const getPlace = (userRating, ratingData) => {
-  console.log('User Rating From Front: ', userRating)
-  // console.log('User Rating before: ', ratingData)
   if (!ratingData.includes(userRating)) {
     ratingData.push(userRating)
     ratingData.sort(compare)
   }
-  console.log('sorted userReytings: ', ratingData)
   const place = ratingData.indexOf(userRating)
-  console.log('place: ', place)
   const content = JSON.stringify(ratingData, null, 2)
   fs.writeFileSync('./rating.json', content, 'utf8')
   return { value: place }
@@ -91,9 +87,6 @@ const getNextQuestion = (answrs, data) => {
     return getQuestion(data)
   } else {
     const missedRight = etalonAnsw - rightAnsw
-    // const rightPercent = rightAnsw / (totalAnsw + missedRight) * 100
-    // console.log('Missed Right Answers: ', missedRight)
-    // console.log('Right Answers Percent: ', rightPercent)
     const out = {
       stats: {
         right: rightAnsw,
@@ -122,11 +115,6 @@ const checkAnswer = (answer, data) => {
       rightAnsw += 1
     }
   })
-  // console.log('User Answers for One Question:\n', answer)
-  console.log('User Answers Amount for One Question: ', answer.answers.length)
-  console.log('Total User Answers Amount : ', totalAnsw)
-  console.log('Total User RIGHT Answers Amount : ', rightAnsw)
-  console.log('Total Etalon Answers: ', etalonAnsw)
 }
 
 module.exports = {

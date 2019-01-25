@@ -1,5 +1,4 @@
 const dotenv = require('dotenv').config()
-// const fs = require('fs')
 const express = require('express')
 const bodyParser = require('body-parser')
 const { getQuestion, getNextQuestion, getPlace } = require('./src/servLib')
@@ -24,7 +23,6 @@ app.listen(port, () => {
 app.get('/question', (req, res) => {
   try {
     const question = getQuestion(arrData)
-    // console.log(question.answers.length)
     return res.send(question)
   } catch (e) {
     console.error(e)
@@ -35,7 +33,6 @@ app.get('/question', (req, res) => {
 app.post('/nextQuestion', (req, res) => {
   if (!req.body) return res.status(500).send('idi v pezdu')
   try {
-    // console.log('got POST from front:\n', req.body)
     const nextQuestion = getNextQuestion(req.body, arrData)
     return res.send(nextQuestion)
   } catch (e) {

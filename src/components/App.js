@@ -21,30 +21,14 @@ class App extends Component {
   }
 
   getPlace = (rating) => {
-    // axios.post(`${REACT_APP_API_URL}/getPlace`, { value: rating })
-    // .then(response => {
-    //   console.log('place from server', response.data.value)
-      return <Place rating={rating} />
-      // this.setState({ place: response.data.value })
-
-      // if (this.state.place) {
-      //   return (
-      //     <div>
-      //       <p>{response.data.value}</p>
-      //     </div>
-      //   )
-      // }
-    // })
-    // .catch(console.error)
-
-}
+    return <Place rating={rating} />
+  }
 
 
   getStatistics = () => {
     const { startTime, finishTime } = this.state
     const { right, total, missed } = this.state.stats
     const diffTime = new Date(finishTime - startTime).getTime()
-    console.log('diffTime: ', diffTime)
     const ms = diffTime % 1000
     const allSec = Math.floor(diffTime / 1000)
     const min = Math.floor(allSec / 60)
@@ -57,26 +41,23 @@ class App extends Component {
     const questionSec = questionAllSec - (questionMin * 60)
     const questionTimeString = `${questionMin}:${questionSec}.${questionMs}`
     const rightPercent = right / (total + missed)
-    console.log('rightPresent: ', (rightPercent * 100))
     const rating = 100000 - (Math.floor(questionTime * rightPercent))
     const place = this.getPlace(rating)
-    // this.setState({ rating: rating })
-      return (
-        //   !finishTime
-        //   ? <div>
-        //     <p>LOADING...</p>
-        //     <p>LOL..KEK..</p>
-        //   </div>
-        //   :
-          <div>
-            <p>общее время квиза: {quizTime}</p>
-            <p>среднее время ответа: {questionTimeString}</p>
-            <p>количество правильных ответов: {right}</p>
-            <p>{`правильность: ${Math.floor(rightPercent * 100)}%`}</p>
-            <p>рейтинг: {rating}</p>
-            {place}
-          </div>
-      )
+    return (
+      !finishTime
+        ? <div>
+          <p>LOADING...</p>
+          <p>LOL..KEK..</p>
+        </div>
+        : <div>
+          <p>общее время квиза: {quizTime}</p>
+          <p>среднее время ответа: {questionTimeString}</p>
+          <p>количество правильных ответов: {right}</p>
+          <p>{`правильность: ${Math.floor(rightPercent * 100)}%`}</p>
+          <p>рейтинг: {rating}</p>
+          {place}
+        </div>
+    )
   }
 
   getFirstQuestion = () => {

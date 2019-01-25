@@ -18,6 +18,12 @@ class Place extends React.Component {
     .catch(console.error)
 }
 
+showPlace = () => {
+  return this.state.place
+  ? this.state.place
+  : 'ща узнаем'
+}
+
 componentDidMount() {
   this.getPlace()
 }
@@ -25,7 +31,7 @@ componentDidMount() {
 render() {
   return (
     <div>
-      <p>место: {this.state.place}</p>
+      <p>место: {this.showPlace()}</p>
     </div>
   )
 }

@@ -1,8 +1,9 @@
 const dotenv = require('dotenv').config()
+// const fs = require('fs')
 const express = require('express')
 const bodyParser = require('body-parser')
-const { getQuestion, getNextQuestion } = require('./src/servLib')
-const { arrData } = require('./src/jsonLib')
+const { getQuestion, getNextQuestion, getPlace } = require('./src/servLib')
+const { arrData, ratingData } = require('./src/jsonLib')
 
 const app = express()
 const port = process.env.APP_PORT || 8000
@@ -43,22 +44,11 @@ app.post('/nextQuestion', (req, res) => {
   }
 })
 
-// app.get('/question', (req, res) => {
-//   console.log(`I GOT A 'question' REQUEST`)
-//   getQuestion()
-//     .then(question => {
-//       return res.status(200).send(question)
-//     })
-//     .catch(console.error)
-// })
-
-// app.post('/nextQuestion', (req, res) => {
-//   // console.log(`I got a 'NEXT QUESTION' request`)
-//   console.log(`I Got The Answers\n${req.body}`)
-//   getNextQuestion(req.body)
-//     .then(question => {
-//       console.log(`nextQuestion type: ${typeof (question)}`)
-//       return res.status(200).send(question)
-//     })
-//     .catch(console.error)
-// })
+app.post('/getPlace', (req, res) => {
+  try {
+    const place = getPlace(req.body.value, ratingData)
+    return res.send(place)
+  } catch (e) {
+    console.error(e)
+  }
+})

@@ -1,4 +1,5 @@
 const dotenv = require('dotenv').config()
+const fs = require('fs')
 const random = require('random')
 
 const {
@@ -7,27 +8,57 @@ const {
 } = process.env
 
 let questionCounter = 0
-let rightAnsw = []
+let rightAnsw = 0
+let totalAnsw = 0
+let etalonAnsw = 0
 
-const rrr = (lastItem) => {
+const compare = (a, b) => {
+  return b - a
+}
+
+const getPlace = (userRating, ratingData) => {
+  console.log('User Rating From Front: ', userRating)
+  // console.log('User Rating before: ', ratingData)
+  if (!ratingData.includes(userRating)) {
+    ratingData.push(userRating)
+    ratingData.sort(compare)
+  }
+  console.log('sorted userReytings: ', ratingData)
+  const place = ratingData.indexOf(userRating)
+  console.log('place: ', place)
+  const content = JSON.stringify(ratingData, null, 2)
+  fs.writeFileSync('./rating.json', content, 'utf8')
+  return { value: place }
+}
+
+const getRandomNumber = (lastItem) => {
   return random.int(0, lastItem - 1)
 }
 
 const randSort = (a, b) => {
-  return random.int(0, 8)
+  return random.int(0, 9)
 }
 
-const getRandomItem = (resp) => {
-  const dig = rrr(resp.length)
-  const itm = resp[dig]
+const getRandomAnswer = data => {
+  const rNumb = getRandomNumber(data.length)
+  const rItem = data[rNumb]
+  return {
+    name: rItem.name,
+    ava: rItem.avatar
+  }
+}
+
+const getRandomItem = (data) => {
+  const rNumb = getRandomNumber(data.length)
+  const itm = data[rNumb]
   return itm.partOf.length === 0
-    ? getRandomItem(resp)
+    ? getRandomItem(data)
     : itm
 }
 
 const getQuestion = (data) => {
   const item = getRandomItem(data)
-  const questionItem = {
+  const fullQuestionItem = {
     question: {
       name: item.name,
       ava: item.avatar
@@ -49,51 +80,58 @@ const getQuestion = (data) => {
     answers.push(pair)
   }
   answers.sort(randSort)
-  questionItem.answers.push(...answers)
-  return questionItem
+  fullQuestionItem.answers.push(...answers)
+  return fullQuestionItem
 }
 
 const getNextQuestion = (answrs, data) => {
-  // console.log('got answer for one question from user:\n', answrs)
   checkAnswer(answrs, data)
   questionCounter += 1
   if (questionCounter < REACT_APP_QUESTIONS_AMOUNT) {
     return getQuestion(data)
   } else {
+    const missedRight = etalonAnsw - rightAnsw
+    // const rightPercent = rightAnsw / (totalAnsw + missedRight) * 100
+    // console.log('Missed Right Answers: ', missedRight)
+    // console.log('Right Answers Percent: ', rightPercent)
+    const out = {
+      stats: {
+        right: rightAnsw,
+        total: totalAnsw,
+        missed: missedRight
+      }
+    }
     questionCounter = 0
-    const out = rightAnsw.length
-    rightAnsw = []
-    // console.log('### right answersOUT: ', out)
-    return '' + out
+    rightAnsw = 0
+    totalAnsw = 0
+    etalonAnsw = 0
+    return out
   }
 }
 
 const checkAnswer = (answer, data) => {
   const { question, answers } = answer
-  // console.log('userAnswersforOneQuestion:\n', answer)
-  const toCheck = answers
+  totalAnsw += answer.answers.length
   const separateAnswers = data.filter(item => item.name === question)
   const etalonAnswers = separateAnswers[0].partOf.map(part => {
     return part.nameOf
   })
-  // console.log('right answers for one questions: ', etalonAnswers)
-  toCheck.forEach(el => {
-    if (etalonAnswers.some(answer => answer === el)) {
-      rightAnsw.push(el)
+  etalonAnsw += etalonAnswers.length
+  answers.forEach(answer => {
+    if (etalonAnswers.some(etalonAnswer => etalonAnswer === answer)) {
+      rightAnsw += 1
     }
   })
-}
-
-const getRandomAnswer = data => {
-  const rr = rrr(data.length)
-  const rItem = data[rr]
-  return {
-    name: rItem.name,
-    ava: rItem.avatar
-  }
+  // console.log('User Answers for One Question:\n', answer)
+  console.log('User Answers Amount for One Question: ', answer.answers.length)
+  console.log('Total User Answers Amount : ', totalAnsw)
+  console.log('Total User RIGHT Answers Amount : ', rightAnsw)
+  console.log('Total Etalon Answers: ', etalonAnsw)
 }
 
 module.exports = {
   getQuestion,
-  getNextQuestion
+  getNextQuestion,
+  getPlace,
+  compare
 }

@@ -11,9 +11,9 @@ class QuestionButt extends React.Component {
 
   toggleClick = () => {
     const { item, mamaClick, z } = this.props
-    let click = this.state.isClicked === 'disabled small ui image'
-      ? 'small ui image'
-      : 'disabled small ui image'
+    let click = this.state.isClicked === 'disabled tiny ui image'
+      ? 'tiny ui image'
+      : 'disabled tiny ui image'
     let click2 = this.state.clickName === ''
       ? item.name
       : ''

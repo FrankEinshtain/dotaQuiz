@@ -48,7 +48,7 @@ class QuestionView extends React.Component {
           key={item.name + index}
           z={index}
           item={item}
-          isClicked='small ui image'
+          isClicked='tiny ui image'
           clickName=''
         />
       )
@@ -59,7 +59,7 @@ class QuestionView extends React.Component {
 
     return (
       <div className='ui container'>
-        <div className='ui small images'>
+        <div className='ui tiny images'>
           <h1>{question.name}</h1>
           <img
             src={`data:image/jpeg;base64,${question.ava}`}
@@ -67,10 +67,10 @@ class QuestionView extends React.Component {
           />
         </div>
         <div className='ui segment'>
-          <div className='ui small images'>
+          <div className='ui tiny images'>
             {firstLine}
           </div>
-          <div className='ui small images'>
+          <div className='ui tiny images'>
             {secondLine}
           </div>
         </div>

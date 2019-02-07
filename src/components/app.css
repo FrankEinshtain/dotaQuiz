@@ -1,0 +1,80 @@
+.container {
+  /* flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: auto;
+  box-sizing: content-box;
+  height: fit-content; */
+  max-width: 450px;
+  /* border: 1px solid black; */
+}
+
+
+.question-box {
+  word-wrap: break-word;
+  text-align: center;
+  height: max-content;
+  flex-flow: column wrap;
+  align-self: center;
+  justify-self: center;
+}
+
+/* .answer-box {
+  box-sizing: border-box; */
+  /* border: 1px solid crimson; */
+  /* padding: 0px; */
+  /* margin: 0px; */
+  /* margin-block-end: 30px; */
+  /* display: flex;
+  height: fit-content;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+} */
+
+
+/* .next-quest-butt {
+  margin-block-start: 40%;
+  border: 0px;
+} */
+
+.img-question {
+  box-align: center;
+  width: 120px;
+  margin: 5px;
+  height: auto;
+}
+
+/* .row {
+  border: 1px solid seagreen;
+} */
+
+label {
+  box-sizing: border-box;
+  justify-self: space-around;
+  margin: 5px;
+  width: 81px;
+  height: auto;
+  display: block;
+  position: relative;
+}
+
+/* .btn .disabled .img-answer,
+.btn .img-answer {
+  justify-self: center;
+  align-self: auto;
+  position: relative;
+  width: 80px;
+  height: auto;
+  z-index: 10;
+  cursor: pointer;
+} */
+
+/* .btn .img-answer {
+  position: relative;
+  width: 80px;
+  height: auto;
+  z-index: 10;
+  cursor: pointer;
+} */
+

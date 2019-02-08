@@ -1,14 +1,13 @@
 {
   "name": "004new",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.2.1",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
-    "nodemon": "^1.18.9",
     "random": "^2.0.13",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",

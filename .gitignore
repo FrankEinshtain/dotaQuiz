@@ -21,8 +21,14 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
 /*.txt
 /ItemNewFields.js
 /items.json
 /_items.json
 /src/_servLib.js
+=======
+
+ItemNewFields.js
+_items.json
+>>>>>>> boot

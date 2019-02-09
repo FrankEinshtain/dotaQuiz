@@ -1,3 +1,35 @@
 .container {
+<<<<<<< HEAD
   max-width: 500px
 }
+=======
+  max-width: 450px;
+}
+
+
+.question-box {
+  word-wrap: break-word;
+  text-align: center;
+  height: max-content;
+  flex-flow: column wrap;
+  align-self: center;
+  justify-self: center;
+}
+
+.img-question {
+  box-align: center;
+  width: 120px;
+  margin: 5px;
+  height: auto;
+}
+
+label {
+  box-sizing: border-box;
+  justify-self: space-around;
+  margin: 5px;
+  width: 81px;
+  height: auto;
+  display: block;
+  position: relative;
+}
+>>>>>>> boot

@@ -1,10 +1,6 @@
 const dotenv = require('dotenv').config()
 const fs = require('fs')
 const random = require('random')
-<<<<<<< HEAD
-
-=======
->>>>>>> boot
 const {
   REACT_APP_QUESTIONS_AMOUNT,
   MAX_ANSWERS
@@ -30,36 +26,6 @@ const getPlace = (userRating, ratingData) => {
   return { value: place }
 }
 
-<<<<<<< HEAD
-const getRandomNumber = (lastItem) => {
-  return random.int(0, lastItem - 1)
-}
-
-const randSort = (a, b) => {
-  return random.int(0, 9)
-}
-
-const getRandomAnswer = data => {
-  const rNumb = getRandomNumber(data.length)
-  const rItem = data[rNumb]
-  return {
-    name: rItem.name,
-    ava: rItem.avatar
-  }
-}
-
-const getRandomItem = (data) => {
-  const rNumb = getRandomNumber(data.length)
-  const itm = data[rNumb]
-  return itm.partOf.length === 0
-    ? getRandomItem(data)
-    : itm
-}
-
-const getQuestion = (data) => {
-  const item = getRandomItem(data)
-  const fullQuestionItem = {
-=======
 const randSort = (a, b) => {
   return random.int(0, 8)
 }
@@ -101,36 +67,12 @@ const getRestAnswers = (data, answs, question) => {
 const getQuestion = data => {
   const item = getRandomQuestion(data)
   questionItem = {
->>>>>>> boot
     question: {
       name: item.name,
       ava: item.avatar
     },
     answers: []
   }
-<<<<<<< HEAD
-  const answers = []
-  for (let t = 0; t < item.partOf.length; t += 1) {
-    answers.push({
-      name: item.partOf[t].nameOf,
-      ava: item.partOf[t].ava
-    })
-  }
-  for (let y = answers.length; y < MAX_ANSWERS; y += 1) {
-    let pair = getRandomAnswer(data)
-    if (answers.length > 0 && answers.some(p => p.name === pair.name)) {
-      pair = getRandomAnswer(data)
-    }
-    answers.push(pair)
-  }
-  answers.sort(randSort)
-  fullQuestionItem.answers.push(...answers)
-  return fullQuestionItem
-}
-
-const getNextQuestion = (answrs, data) => {
-  checkAnswer(answrs, data)
-=======
   const answs = []
   for (let i = 0; i < item.partOf.length; i += 1) {
     answs.push({
@@ -149,7 +91,6 @@ const getNextQuestion = (answrs, data) => {
 
 const getNextQuestion = (userAnswers, data) => {
   checkAnswer(userAnswers, data)
->>>>>>> boot
   questionCounter += 1
   if (questionCounter < REACT_APP_QUESTIONS_AMOUNT) {
     return getQuestion(data)

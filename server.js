@@ -17,18 +17,11 @@ app.use((req, res, next) => {
 })
 
 app.listen(port, () => {
-<<<<<<< HEAD
-  console.log(`We Are Live on ${port}!`)
-})
-
-app.get('/question', (req, res) => {
-=======
   console.log(`We Are Live on ${port} port!`)
 })
 
 app.get('/question', (req, res) => {
   console.log('have a /QUESTION request')
->>>>>>> boot
   try {
     const question = getQuestion(arrData)
     return res.send(question)

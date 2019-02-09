@@ -1,8 +1,4 @@
 .container {
-<<<<<<< HEAD
-  max-width: 500px
-}
-=======
   max-width: 450px;
 }
 
@@ -32,4 +28,3 @@ label {
   display: block;
   position: relative;
 }
->>>>>>> boot

@@ -1,5 +1,5 @@
 .container {
-  max-width: 450px;
+  max-width: 400px;
 }
 
 
@@ -14,8 +14,7 @@
 
 .img-question {
   box-align: center;
-  width: 120px;
-  margin: 5px;
+  width: 90px;
   height: auto;
 }
 
@@ -23,7 +22,7 @@ label {
   box-sizing: border-box;
   justify-self: space-around;
   margin: 5px;
-  width: 81px;
+  width: 80px;
   height: auto;
   display: block;
   position: relative;

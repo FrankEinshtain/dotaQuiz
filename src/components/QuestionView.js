@@ -55,7 +55,7 @@ class QuestionView extends Component {
     return (
       <Fragment>
         <div className='row'>
-          <div className='col-6 question-box'>
+          <div className='col-5 question-box'>
             <div className='card'>
               <h5 className='card-header'>{question.name}</h5>
               <div className='card-body'>
@@ -79,7 +79,7 @@ class QuestionView extends Component {
             </div>
           </div>
 
-          <div className='col-6'>
+          <div className='col-7'>
             <div className='row answer-box'>
               {answsReady}
             </div>
